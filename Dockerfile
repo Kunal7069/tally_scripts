@@ -27,7 +27,6 @@ RUN if [ -f poetry.lock ]; then \
 RUN poetry install --no-root --no-interaction --no-ansi
 
 # Copy the rest of your project
-COPY . .
+EXPOSE 8000
 
-# Default command (update if you have a different entrypoint)
-CMD ["poetry", "run", "python", "main.py"]
+CMD ["poetry", "run", "uvicorn", "main:app","--reload", "--host", "0.0.0.0", "--port", "8000"]
