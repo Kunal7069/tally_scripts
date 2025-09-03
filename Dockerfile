@@ -16,9 +16,11 @@ WORKDIR /app
 # Copy dependency files first
 COPY pyproject.toml poetry.lock* ./
 
-# Ensure lock file is in sync
+# Make sure lock file exists and is valid
 RUN if [ -f poetry.lock ]; then \
-        poetry lock --no-update; \
+        poetry lock; \
+    else \
+        poetry lock; \
     fi
 
 # Install dependencies
