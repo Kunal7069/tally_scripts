@@ -13,14 +13,19 @@ ENV PATH="/root/.local/bin:$PATH"
 
 WORKDIR /app
 
-# Copy only pyproject.toml and poetry.lock first (for caching)
+# Copy dependency files first
 COPY pyproject.toml poetry.lock* ./
+
+# Ensure lock file is in sync
+RUN if [ -f poetry.lock ]; then \
+        poetry lock --no-update; \
+    fi
 
 # Install dependencies
 RUN poetry install --no-root --no-interaction --no-ansi
 
-# Copy project files
+# Copy the rest of your project
 COPY . .
 
-# Run your app
+# Default command (update if you have a different entrypoint)
 CMD ["poetry", "run", "python", "main.py"]
